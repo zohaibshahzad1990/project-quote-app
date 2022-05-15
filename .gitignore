@@ -40,3 +40,20 @@ testem.log
 # System files
 .DS_Store
 Thumbs.db
+API/QuoteAPI/obj/project.assets.json
+API/QuoteAPI/obj/project.nuget.cache
+API/QuoteAPI/obj/QuoteAPI.csproj.nuget.dgspec.json
+API/QuoteAPI/obj/QuoteAPI.csproj.nuget.g.props
+API/QuoteAPI/obj/QuoteAPI.csproj.nuget.g.targets
+API/QuoteAPI/obj/Debug/net6.0/.NETCoreApp,Version=v6.0.AssemblyAttributes.cs
+API/QuoteAPI/obj/Debug/net6.0/project.razor.json
+API/QuoteAPI/obj/Debug/net6.0/QuoteAPI.AssemblyInfo.cs
+API/QuoteAPI/obj/Debug/net6.0/QuoteAPI.AssemblyInfoInputs.cache
+API/QuoteAPI/obj/Debug/net6.0/QuoteAPI.assets.cache
+API/QuoteAPI/obj/Debug/net6.0/QuoteAPI.csproj.AssemblyReference.cache
+API/QuoteAPI/obj/Debug/net6.0/QuoteAPI.GeneratedMSBuildEditorConfig.editorconfig
+API/QuoteAPI/obj/Debug/net6.0/QuoteAPI.GlobalUsings.g.cs
+API/QuoteAPI/.vs/QuoteAPI/project-colors.json
+API/QuoteAPI/.vs/QuoteAPI/DesignTimeBuild/.dtbcache.v2
+API/QuoteAPI/.vs/QuoteAPI/v17/.futdcache.v1
+API/QuoteAPI/.vs/QuoteAPI/v17/.suo
