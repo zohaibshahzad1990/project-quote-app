@@ -26,6 +26,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { InputTextareaModule } from 'primeng/inputtextarea';
+import { ApiService } from 'src/service/api.service';
+
 
 @NgModule({
   declarations: [
@@ -33,6 +35,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
   ],
   imports: [
     BrowserModule,
+    HttpClientModule,
     BrowserAnimationsModule,
     TableModule,
     CalendarModule,
@@ -56,7 +59,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
     InputTextareaModule,
     AppRoutingModule
   ],
-  providers: [ProductService, MessageService, ConfirmationService],
+  providers: [ProductService, MessageService, ConfirmationService, ApiService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

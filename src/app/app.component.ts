@@ -3,6 +3,8 @@ import { Product } from './product';
 import { ProductService } from './productservice';
 import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
+import { ApiService } from 'src/service/api.service';
+import { Project, ProjectArray } from 'src/models/model';
 
 @Component({
   selector: 'app-root',
@@ -17,89 +19,119 @@ import { MessageService } from 'primeng/api';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  productDialog: boolean = false;
+  projectDialog: boolean = false;
 
-  products: Product[] = [];
+  projects: Project[] = [];
 
-  product: Product = {};
+  project: Project = {} as Project;
 
-  selectedProducts: Product[] | null = [];
+  selectedProjects: Project[] | null = [];
 
   submitted: boolean = false;
 
-  constructor(private productService: ProductService, private messageService: MessageService, private confirmationService: ConfirmationService) { }
+  constructor(private productService: ProductService, private messageService: MessageService, private confirmationService: ConfirmationService, private apiService: ApiService) { }
 
   ngOnInit() {
-    this.productService.getProducts().then(data => this.products = data);
+    this.loadAllProjects()
   }
 
-  openNew() {
-    this.product = {};
-    this.submitted = false;
-    this.productDialog = true;
-  }
+  loadAllProjects() {
+    this.apiService.getProjects().subscribe({
+      next: (data: Project[]) => {
 
-  deleteSelectedProducts() {
-    this.confirmationService.confirm({
-      message: 'Are you sure you want to delete the selected products?',
-      header: 'Confirm',
-      icon: 'pi pi-exclamation-triangle',
-      accept: () => {
-        this.products = this.products.filter(val => !this.selectedProducts!.includes(val));
-        this.selectedProducts = null;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-      }
+        this.projects = data
+      }, // success path
+      // error: error => this.error = error, // error path
     });
   }
 
-  editProduct(product: Product) {
-    this.product = { ...product };
-    this.productDialog = true;
+  openNew() {
+    this.project = {} as Project;
+    this.submitted = false;
+    this.projectDialog = true;
   }
 
-  deleteProduct(product: Product) {
+  deleteSelectedProducts() {
+    // this.confirmationService.confirm({
+    //   message: 'Are you sure you want to delete the selected products?',
+    //   header: 'Confirm',
+    //   icon: 'pi pi-exclamation-triangle',
+    //   accept: () => {
+    //     this.projects = this.projects.filter(val => !this.selectedProjects!.includes(val));
+    //     this.selectedProjects = null;
+    //     this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
+    //   }
+    // });
+  }
+
+  editProject(project: Project) {
+    this.project = { ...project };
+    this.projectDialog = true;
+  }
+
+  deleteProject(project: Project) {
     this.confirmationService.confirm({
-      message: 'Are you sure you want to delete ' + product.name + '?',
+      message: 'Are you sure you want to delete ' + project.name + '?',
       header: 'Confirm',
       icon: 'pi pi-exclamation-triangle',
       accept: () => {
-        this.products = this.products.filter(val => val.id !== product.id);
-        this.product = {};
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
+        this.apiService.DeleteProjectById(project.id).subscribe({
+          next: (data: any) => {
+
+            this.projects = this.projects.filter(val => val.id !== project.id);
+            this.project = {} as Project;
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Project Deleted', life: 3000 });
+          }, // success path
+          // error: error => this.error = error, // error path
+        })
+
       }
     });
   }
 
   hideDialog() {
-    this.productDialog = false;
+    this.projectDialog = false;
     this.submitted = false;
   }
 
-  saveProduct() {
+  saveProject() {
     this.submitted = true;
 
-    if (this.product!.name!.trim()) {
-      if (this.product.id) {
-        this.products[this.findIndexById(this.product.id)] = this.product;
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+    if (this.project!.name!.trim()) {
+      if (this.project.id) {
+        this.apiService.UpdateProjectById(this.project.id, this.project.name).subscribe({
+          next: (data: any) => {
+            //this.projects[this.findIndexById(this.project.id)] = this.project;
+            this.loadAllProjects()
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
+          }
+        });
+
       }
       else {
-        this.product.id = this.createId();
-        this.product.image = 'product-placeholder.svg';
-        this.products.push(this.product);
-        this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+        this.apiService.createProject(this.project.name).subscribe({
+          next: (data: any) => {
+            this.loadAllProjects()
+            this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
+          }
+        });
+        // this.apiService.createProject()
+        // this.project.id = this.createId();
+        // this.product.image = 'product-placeholder.svg';
+        // this.products.push(this.product);
+        // this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
       }
 
-      this.products = [...this.products];
-      this.productDialog = false;
-      this.product = {};
+      this.projects = [...this.projects];
+      this.projectDialog = false;
+      this.project = {} as any;
     }
   }
 
-  findIndexById(id: string): number {
+  findIndexById(id: number): number {
     let index = -1;
-    for (let i = 0; i < this.products.length; i++) {
-      if (this.products[i].id === id) {
+    for (let i = 0; i < this.projects.length; i++) {
+      if (this.projects[i].id === id) {
         index = i;
         break;
       }
@@ -108,12 +140,5 @@ export class AppComponent {
     return index;
   }
 
-  createId(): string {
-    let id = '';
-    var chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (var i = 0; i < 5; i++) {
-      id += chars.charAt(Math.floor(Math.random() * chars.length));
-    }
-    return id;
-  }
+
 }

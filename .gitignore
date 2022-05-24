@@ -57,3 +57,5 @@ API/QuoteAPI/.vs/QuoteAPI/project-colors.json
 API/QuoteAPI/.vs/QuoteAPI/DesignTimeBuild/.dtbcache.v2
 API/QuoteAPI/.vs/QuoteAPI/v17/.futdcache.v1
 API/QuoteAPI/.vs/QuoteAPI/v17/.suo
+bin
+obj
