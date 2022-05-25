@@ -7,8 +7,6 @@ namespace QuoteAPI.DAL
     {
         public int Id { get; set; }
         public long CategoryPositionId { get; set; }
-        public string MarginLineItem { get; set; } = null!;
-        public decimal MarginAmount { get; set; }
         public string ItemDescription { get; set; } = null!;
         public string Uom { get; set; } = null!;
         public decimal PricePerQuantity { get; set; }

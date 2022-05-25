@@ -49,10 +49,6 @@ namespace QuoteAPI.DAL
                     .HasColumnType("bigint(20)")
                     .HasColumnName("id");
 
-                entity.Property(e => e.Category1)
-                    .HasMaxLength(150)
-                    .HasColumnName("category");
-
                 entity.Property(e => e.CategoryId)
                     .HasColumnType("bigint(20)")
                     .HasColumnName("categoryId");
@@ -60,6 +56,10 @@ namespace QuoteAPI.DAL
                 entity.Property(e => e.CreatedOn)
                     .HasColumnType("datetime")
                     .HasColumnName("createdOn");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(150)
+                    .HasColumnName("name");
 
                 entity.Property(e => e.ProjectId)
                     .HasColumnType("bigint(20)")
@@ -84,7 +84,6 @@ namespace QuoteAPI.DAL
 
                 entity.Property(e => e.Id)
                     .HasColumnType("bigint(20)")
-                    .ValueGeneratedNever()
                     .HasColumnName("id");
 
                 entity.Property(e => e.CategoryId)
@@ -92,7 +91,7 @@ namespace QuoteAPI.DAL
                     .HasColumnName("categoryId");
 
                 entity.Property(e => e.CategoryPosition)
-                    .HasPrecision(10)
+                    .HasPrecision(4, 2)
                     .HasColumnName("categoryPosition");
 
                 entity.Property(e => e.CreatedOn)
@@ -125,7 +124,7 @@ namespace QuoteAPI.DAL
                     .HasColumnName("createdOn");
 
                 entity.Property(e => e.MarginAmount)
-                    .HasPrecision(10)
+                    .HasPrecision(19, 2)
                     .HasColumnName("marginAmount");
 
                 entity.Property(e => e.MarginLineItem)
@@ -172,7 +171,7 @@ namespace QuoteAPI.DAL
                 entity.HasCharSet("utf8mb4")
                     .UseCollation("utf8mb4_0900_ai_ci");
 
-                entity.HasIndex(e => e.CategoryPositionId, "fk_cat_pos_quote_id_idx");
+                entity.HasIndex(e => e.CategoryPositionId, "fk_cate_pos_id_idx");
 
                 entity.HasIndex(e => e.MarginId, "fk_margin_quote_id_idx");
 
@@ -180,7 +179,6 @@ namespace QuoteAPI.DAL
 
                 entity.Property(e => e.Id)
                     .HasColumnType("int(11)")
-                    .ValueGeneratedNever()
                     .HasColumnName("id");
 
                 entity.Property(e => e.CategoryPositionId)
@@ -195,20 +193,12 @@ namespace QuoteAPI.DAL
                     .HasMaxLength(145)
                     .HasColumnName("itemDescription");
 
-                entity.Property(e => e.MarginAmount)
-                    .HasPrecision(3, 2)
-                    .HasColumnName("marginAmount");
-
                 entity.Property(e => e.MarginId)
                     .HasColumnType("bigint(20)")
                     .HasColumnName("marginId");
 
-                entity.Property(e => e.MarginLineItem)
-                    .HasMaxLength(145)
-                    .HasColumnName("marginLineItem");
-
                 entity.Property(e => e.PricePerQuantity)
-                    .HasPrecision(10)
+                    .HasPrecision(19, 2)
                     .HasColumnName("pricePerQuantity");
 
                 entity.Property(e => e.ProjectId)
@@ -216,7 +206,7 @@ namespace QuoteAPI.DAL
                     .HasColumnName("projectId");
 
                 entity.Property(e => e.Quantity)
-                    .HasPrecision(10)
+                    .HasPrecision(19, 2)
                     .HasColumnName("quantity");
 
                 entity.Property(e => e.Uom)
@@ -228,14 +218,14 @@ namespace QuoteAPI.DAL
                     .HasColumnName("updatedOn");
 
                 entity.Property(e => e.Waste)
-                    .HasPrecision(10)
+                    .HasPrecision(19, 2)
                     .HasColumnName("waste");
 
                 entity.HasOne(d => d.CategoryPosition)
                     .WithMany(p => p.Quotedata)
                     .HasForeignKey(d => d.CategoryPositionId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_cat_pos_quote_id");
+                    .HasConstraintName("fk_cate_pos_id");
 
                 entity.HasOne(d => d.Margin)
                     .WithMany(p => p.Quotedata)

@@ -11,7 +11,7 @@ namespace QuoteAPI.DAL
         }
 
         public long Id { get; set; }
-        public string Category1 { get; set; } = null!;
+        public string Name { get; set; } = null!;
         public DateTime CreatedOn { get; set; }
         public DateTime UpdatedOn { get; set; }
         public long ProjectId { get; set; }
