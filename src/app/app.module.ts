@@ -5,7 +5,7 @@ import { AppComponent } from './app.component';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { ProductService } from './productservice';
+import { ProductService } from '../service/productservice';
 import { TableModule } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { CalendarModule } from 'primeng/calendar';
@@ -27,11 +27,19 @@ import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { ApiService } from 'src/service/api.service';
+import { ProjectdetailComponent } from './projectdetail/projectdetail.component';
+import { ProjectComponent } from './project/project.component';
+import { PagenotfoundComponent } from './pagenotfound/pagenotfound.component';
+import { AddlineitemComponent } from './addlineitem/addlineitem.component';
 
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    ProjectdetailComponent,
+    ProjectComponent,
+    PagenotfoundComponent,
+    AddlineitemComponent
   ],
   imports: [
     BrowserModule,
