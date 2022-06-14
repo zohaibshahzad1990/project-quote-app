@@ -82,7 +82,7 @@ namespace QuoteAPI.Controllers
       {
         CategoryName = x.Category.Name,
         x.CategoryId
-      }).ToListAsync();
+      }).Distinct().ToListAsync();
       foreach (var cat in catgories)
       {
         var lineItemCat = new LinetItemCategory()
