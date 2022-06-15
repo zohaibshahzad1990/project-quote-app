@@ -1,1 +1,99 @@
-<p>projectdetail works!</p>
+<p-table [value]="quoteData" responsiveLayout="scroll" dataKey="name">
+  <ng-template pTemplate="header">
+    <tr>
+      <th></th>
+      <th>Cost Code</th>
+      <th>Item Description</th>
+      <th>UOM</th>
+      <th>Price Per Quantity</th>
+      <th>Quantity</th>
+      <th>Cost (Ex GST, EX Waste, Ex Margin)</th>
+      <th>Waste</th>
+      <th>Total (Ex GST)</th>
+      <th>Margin Amount</th>
+      <th>Total</th>
+    </tr>
+  </ng-template>
+  <ng-template pTemplate="body" let-quoteData let-expanded="expanded">
+    <tr>
+      <td>
+        <button
+          type="button"
+          pButton
+          pRipple
+          [pRowToggler]="quoteData"
+          class="p-button-text p-button-rounded p-button-plain"
+          [icon]="expanded ? 'pi pi-chevron-down' : 'pi pi-chevron-right'"
+        ></button>
+      </td>
+      <td>{{ quoteData.name }}</td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td></td>
+      <td>{{ quoteData.totalExGst }}</td>
+      <td>{{ quoteData.marginAmount }}</td>
+      <td>{{ quoteData.total }}</td>
+    </tr>
+
+    <!-- <template *ngFor="let lic of quoteData; let i = index">
+      <tr>
+        <td>{{ lic.name }}</td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>{{ lic.totalExGst }}</td>
+        <td>{{ lic.marginAmount }}</td>
+        <td>{{ lic.total }}</td>
+      </tr>
+    </template> -->
+  </ng-template>
+  <ng-template pTemplate="rowexpansion" let-quoteData>
+    <tr>
+      <td colspan="7">
+        <div class="p-3">
+          <p-table [value]="quoteData.linetItem" dataKey="id">
+            <ng-template pTemplate="header">
+              <tr>
+                <th>Cost Code</th>
+                <th>Item Description</th>
+                <th>UOM</th>
+                <th>Price Per Quantity</th>
+                <th>Quantity</th>
+                <th>Cost (Ex GST, EX Waste, Ex Margin)</th>
+                <th>Waste</th>
+                <th>Total (Ex GST)</th>
+                <th>Margin Amount</th>
+                <th>Total</th>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-order>
+              <tr>
+                <td>{{ quoteData.cost }}</td>
+                <td>{{ quoteData.itemDescription }}</td>
+                <td>{{ quoteData.uom }}</td>
+                <td>{{ quoteData.pricePerQuantity }}</td>
+                <td>{{ quoteData.quantity }}</td>
+                <td>{{ quoteData.gstAmount }}</td>
+                <td>{{ quoteData.waste }}</td>
+                <td>{{ quoteData.totalExGst }}</td>
+                <td>{{ quoteData.marginAmount }}</td>
+                <td>{{ quoteData.total }}</td>
+              </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage">
+              <tr>
+                <td colspan="6">There are no order for this product yet.</td>
+              </tr>
+            </ng-template>
+          </p-table>
+        </div>
+      </td>
+    </tr>
+  </ng-template>
+</p-table>
