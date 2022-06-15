@@ -1,1 +1,92 @@
-<p>addlineitem works!</p>
+<h1>Add Line Item</h1>
+<div class="p-fluid grid">
+  <div class="card">
+    <div class="p-fluid grid">
+      <div class="field md:col-4">
+        <input
+          type="text"
+          id="inputtext"
+          pInputText
+          [(ngModel)]="marginLineItem"
+          class="ng-invalid ng-dirty"
+          placeholder="Margin Line Item"
+        />
+      </div>
+
+      <div class="field md:col-4">
+        <input
+          inputId="inputtext"
+          pInputText
+          [(ngModel)]="marginAmount"
+          class="ng-invalid ng-dirty"
+          placeholder="Margin Amount"
+        />
+      </div>
+      <div class="field md:col-4">
+        <input
+          inputId="inputtext"
+          pInputText
+          [(ngModel)]="itemDescription"
+          class="ng-invalid ng-dirty"
+          placeholder="Item Description"
+        />
+      </div>
+      <div class="field md:col-4">
+        <input
+          inputId="inputtext"
+          pInputText
+          [(ngModel)]="UOM"
+          class="ng-invalid ng-dirty"
+          placeholder="UOM"
+        />
+      </div>
+      <div class="field md:col-4">
+        <input
+          inputId="inputtext"
+          pInputText
+          [(ngModel)]="pricePerQuantity"
+          class="ng-invalid ng-dirty"
+          placeholder="Price Per Qty"
+        />
+      </div>
+      <div class="field md:col-4">
+        <input
+          inputId="inputtext"
+          pInputText
+          [(ngModel)]="quantity"
+          class="ng-invalid ng-dirty"
+          placeholder="Price Per Qty"
+        />
+      </div>
+      <div class="field md:col-4">
+        <input
+          inputId="inputtext"
+          pInputText
+          [(ngModel)]="waste"
+          class="ng-invalid ng-dirty"
+          placeholder="Price Per Qty"
+        />
+      </div>
+      <div class="field md:col-4">
+        <p-dropdown
+          inputId="dropdown"
+          [autoDisplayFirst]="false"
+          [options]="categories"
+          [(ngModel)]="selectedCateory"
+          optionLabel="name"
+          class="ng-invalid ng-dirty"
+          placeholder="Dropdown"
+        ></p-dropdown>
+      </div>
+    </div>
+  </div>
+  <div class="flex justify-content-center flex-wrap">
+    <button
+      class="flex align-items-center justify-content-center"
+      pButton
+      type="button"
+      (click)="handleSubmit($event)"
+      label="Add"
+    ></button>
+  </div>
+</div>
