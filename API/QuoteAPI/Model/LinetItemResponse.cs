@@ -19,6 +19,12 @@ namespace QuoteAPI.Model
   }
   public class LinetItem
   {
+    private readonly decimal _totalMargin;
+
+    public LinetItem(decimal totalMargin)
+    {
+      _totalMargin=totalMargin;
+    }
     public long CategoryPositionId { get; set; }
     public decimal CategoryPosition { get; set; }
     public string ItemDescription { get; set; }
@@ -28,10 +34,34 @@ namespace QuoteAPI.Model
     public decimal Waste { get; set; }
     public long MarginId { get; set; }
     public decimal Cost { get; set; }
-    public decimal TotalExGst { get; set; }
-    public decimal Total { get; set; }
-    public decimal MarginAmount { get; set; }
-    public decimal GSTAmount { get; set; }
+    public decimal TotalExGst
+    {
+      get
+      {
+        return Cost+(Cost*Waste);
+      }
+    }
+    public decimal Total
+    {
+      get
+      {
+        return TotalExGst+MarginAmount+GSTAmount;
+      }
+    }
+    public decimal MarginAmount
+    {
+      get
+      {
+        return TotalExGst*_totalMargin;
+      }
+    }
+    public decimal GSTAmount
+    {
+      get
+      {
+        return (TotalExGst+MarginAmount)*0.1M;
+      }
+    }
 
   }
 }
