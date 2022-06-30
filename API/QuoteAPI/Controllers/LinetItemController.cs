@@ -72,6 +72,7 @@ namespace QuoteAPI.Controllers
         return Ok(new ApiResponse() { isScuccess = false });
       }
     }
+
     [HttpGet("{ProjectId}")]
     public async Task<IActionResult> Get(long ProjectId)
     {
@@ -106,6 +107,14 @@ namespace QuoteAPI.Controllers
             Cost = x.Quotedata.FirstOrDefault()!.PricePerQuantity * x.Quotedata.FirstOrDefault()!.Quantity,
 
           } :new LinetItem(0)).ToListAsync();
+        var sumOfTotalExGstAmount=items.Sum(x => x.TotalExGst);
+        var sumOfMargin = items.Sum(x => x.MarginAmount);
+        var sumOfGst = items.Sum(x => x.GSTAmount);
+        var total = sumOfTotalExGstAmount+sumOfMargin+sumOfGst;
+        lineItemCat.GSTAmount=sumOfGst;
+        lineItemCat.TotalExGst=sumOfTotalExGstAmount;
+        lineItemCat.MarginAmount=sumOfMargin;
+        lineItemCat.Total=total;
         lineItemCat.LinetItem.AddRange(items);
         res.LinetItemCategory.Add(lineItemCat);
       }

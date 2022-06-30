@@ -15,11 +15,11 @@ namespace QuoteAPI.Controllers
       _context = context;
     }
     [HttpPost]
-    public async Task<IActionResult> Add(string Name,long ProjectId)
+    public async Task<IActionResult> Add(string Name, long ProjectId)
     {
       long categoryId = 1;
       decimal categoryPosition = 1.0M;
-      var existingCategory=await _context.Categories.Where(x => x.ProjectId == ProjectId).OrderByDescending(x=>x.CategoryId).FirstOrDefaultAsync();
+      var existingCategory = await _context.Categories.Where(x => x.ProjectId == ProjectId).OrderByDescending(x => x.CategoryId).FirstOrDefaultAsync();
       if (existingCategory != null)
       {
         categoryId = existingCategory.CategoryId + 1;
@@ -27,22 +27,28 @@ namespace QuoteAPI.Controllers
         //  if (existingCtegoryPosition != null) {
         //  categoryPosition = existingCtegoryPosition.CategoryPosition + 0.1M;
         //}
-       // categoryPosition = categoryId;
+        // categoryPosition = categoryId;
       }
-     
+
 
       var c = new Category() { CategoryId = categoryId, ProjectId = ProjectId, Name = Name, UpdatedOn = DateTime.Now, CreatedOn = DateTime.Now };
       _context.Categories.Add(c);
-      int res=await _context.SaveChangesAsync();
+      int res = await _context.SaveChangesAsync();
       if (res == 0)
       {
-       
-        return Ok(new ApiResponse() { isScuccess=false});
+
+        return Ok(new ApiResponse() { isScuccess=false });
       }
       //var cp = new Categorypostion() { CategoryId = c.Id, CategoryPosition = categoryPosition, CreatedOn = DateTime.Now, UpdatedOn = DateTime.Now };
       //_context.Categorypostions.Add(cp);
       //await _context.SaveChangesAsync();
       return Ok(new ApiResponse() { isScuccess = true, data = new { CategoryId = c.Id } });
+    }
+
+    [HttpGet("{ProjectId}")]
+    public async Task<IActionResult> Get(long ProjectId)
+    {
+      return Ok(await _context.Categories.Where(x => x.ProjectId==ProjectId).ToListAsync());
     }
   }
 }
