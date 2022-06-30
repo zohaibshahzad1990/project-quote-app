@@ -32,9 +32,10 @@ namespace QuoteAPI.Controllers
         };
         _context.Margins.Add(margin);
         await _context.SaveChangesAsync();
+
         decimal lastCateegoryPos = await _context.Categorypostions
-          .Where(x => x.Category.ProjectId == addLineItemRequest.ProjectId && x.Category.Id == addLineItemRequest.CategoryId)
-          .Select(x => x.CategoryPosition).OrderByDescending(z => z).FirstOrDefaultAsync();
+        .Where(x => x.Category.ProjectId == addLineItemRequest.ProjectId && x.Category.Id == addLineItemRequest.CategoryId)
+        .Select(x => x.CategoryPosition).OrderByDescending(z => z).FirstOrDefaultAsync();
         if (lastCateegoryPos == default)
         {
           lastCateegoryPos = 1;
@@ -43,13 +44,47 @@ namespace QuoteAPI.Controllers
         {
           lastCateegoryPos = lastCateegoryPos + 0.01M;
         }
+        long newCategoryPostionId = 0;
         var cp = new Categorypostion() { CategoryId = addLineItemRequest.CategoryId, CategoryPosition = lastCateegoryPos, CreatedOn = DateTime.Now, UpdatedOn = DateTime.Now };
         _context.Categorypostions.Add(cp);
         await _context.SaveChangesAsync();
+        newCategoryPostionId = cp.Id;
+        if (addLineItemRequest.Position > 0)
+        {
+          var existsCategoryPositionId = await _context.Quotedata
+          .Where(x => x.CategoryPosition.Category.ProjectId == addLineItemRequest.ProjectId && x.CategoryPosition.Category.Id == addLineItemRequest.CategoryId && x.CategoryPosition.CategoryPosition == addLineItemRequest.Position)
+          .Select(x=>x.CategoryPositionId).FirstOrDefaultAsync();
+
+          
+          if (existsCategoryPositionId>0)
+          {
+            newCategoryPostionId = existsCategoryPositionId;
+            var toSwitchPostionItems=await _context.Quotedata.
+              Where(x=>x.ProjectId==addLineItemRequest.ProjectId && x.CategoryPosition.Category.Id == addLineItemRequest.CategoryId && x.CategoryPosition.CategoryPosition>=addLineItemRequest.Position)
+              .ToListAsync();
+            decimal SwappingPostion = addLineItemRequest.Position;
+            foreach (var item in toSwitchPostionItems)
+            {
+              SwappingPostion =SwappingPostion + 0.01M;
+              var categoryPositionId=await _context.Categorypostions
+                .Where(x => x.Category.ProjectId == addLineItemRequest.ProjectId && x.Category.Id == addLineItemRequest.CategoryId && x.CategoryPosition == SwappingPostion)
+                .Select(x=>x.Id)
+              .FirstOrDefaultAsync();
+              item.CategoryPositionId = categoryPositionId;
+              _context.Update(item);
+              await _context.SaveChangesAsync();
+            }
+
+            
+
+          }
+         
+        }
+      
 
         var quoteDate = new Quotedatum()
         {
-          CategoryPositionId = cp.Id,
+          CategoryPositionId = newCategoryPostionId,
           MarginId = margin.Id,
           ItemDescription = addLineItemRequest.ItemDescription,
           PricePerQuantity = addLineItemRequest.PricePerQuantity,

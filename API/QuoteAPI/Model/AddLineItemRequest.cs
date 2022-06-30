@@ -11,6 +11,7 @@ namespace QuoteAPI.Model
     public decimal PricePerQuantity { get; set; }
     public decimal Quantity { get; set; }
     public decimal Waste { get; set; }
+    public decimal Position { get; set; }
 
   }
 }
