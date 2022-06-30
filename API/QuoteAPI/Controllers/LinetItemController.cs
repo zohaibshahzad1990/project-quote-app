@@ -72,6 +72,7 @@ namespace QuoteAPI.Controllers
         return Ok(new ApiResponse() { isScuccess = false });
       }
     }
+
     [HttpGet("{ProjectId}")]
     public async Task<IActionResult> Get(long ProjectId)
     {
@@ -94,7 +95,7 @@ namespace QuoteAPI.Controllers
 
 
         var items = await _context.Categorypostions.Where(x => x.Category.Id == cat.CategoryId).Select(x => x.Quotedata!=null && x.Quotedata.Count>0?
-          new LinetItem()
+          new LinetItem(totalMarginSum)
           {
             CategoryPosition = x.CategoryPosition,
             CategoryPositionId = x.Id,
@@ -103,9 +104,17 @@ namespace QuoteAPI.Controllers
             Quantity = x.Quotedata.FirstOrDefault()!.Quantity,
             Waste = x.Quotedata!.FirstOrDefault()!.Waste,
             PricePerQuantity = x.Quotedata.FirstOrDefault()!.PricePerQuantity,
-            Cost = x.Quotedata.FirstOrDefault()!.PricePerQuantity * x.Quotedata.FirstOrDefault()!.Quantity
+            Cost = x.Quotedata.FirstOrDefault()!.PricePerQuantity * x.Quotedata.FirstOrDefault()!.Quantity,
 
-          }:new LinetItem()).ToListAsync();
+          } :new LinetItem(0)).ToListAsync();
+        var sumOfTotalExGstAmount=items.Sum(x => x.TotalExGst);
+        var sumOfMargin = items.Sum(x => x.MarginAmount);
+        var sumOfGst = items.Sum(x => x.GSTAmount);
+        var total = sumOfTotalExGstAmount+sumOfMargin+sumOfGst;
+        lineItemCat.GSTAmount=sumOfGst;
+        lineItemCat.TotalExGst=sumOfTotalExGstAmount;
+        lineItemCat.MarginAmount=sumOfMargin;
+        lineItemCat.Total=total;
         lineItemCat.LinetItem.AddRange(items);
         res.LinetItemCategory.Add(lineItemCat);
       }
