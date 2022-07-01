@@ -108,6 +108,55 @@ namespace QuoteAPI.Controllers
       }
     }
 
+    [HttpDelete("{id}")]
+    public async Task<IActionResult> Delete(long? id)
+    {
+      var transaction = _context.Database.BeginTransaction();
+      try
+      {
+        var lineItemToDelete = await _context.Quotedata.Where(x => x.Id==id).FirstOrDefaultAsync();
+        var categoryId = lineItemToDelete.CategoryPosition.CategoryId;
+        var categoryPoistionId = lineItemToDelete.CategoryPositionId;
+        _context.Remove(lineItemToDelete);
+        await _context.SaveChangesAsync();
+        var categoeyPoistionItemToDelete=await _context.Categorypostions.FirstOrDefaultAsync(x => x.Id==categoryPoistionId);
+        if (categoeyPoistionItemToDelete is not null)
+        {
+          _context.Remove(categoeyPoistionItemToDelete);
+          await _context.SaveChangesAsync();
+        }
+        var posItemsToOrderPoistion=await _context.Categorypostions.Where(x => x.CategoryId==categoryId).OrderBy(x => x.CategoryPosition).ToListAsync();
+        var NumberStartFrom=await _context.Categories.Where(x => x.Id==categoryId).Select(x => x.CategoryId).FirstOrDefaultAsync();
+        var swappingNumber=Convert.ToDecimal(NumberStartFrom);
+        for(int i=0;i< posItemsToOrderPoistion.Count;i++)
+        {
+          var itemToUpdate = posItemsToOrderPoistion[i];
+          if (i==0)
+          {
+            itemToUpdate.CategoryPosition=NumberStartFrom;
+            _context.Update(itemToUpdate);
+            await _context.SaveChangesAsync();
+          }
+          else
+          {
+            swappingNumber =swappingNumber + 0.01M;
+            itemToUpdate.CategoryPosition=NumberStartFrom;
+            _context.Update(itemToUpdate);
+            await _context.SaveChangesAsync();
+
+          }
+        }
+        
+        transaction.Commit();
+        return Ok(new ApiResponse() { isScuccess = true });
+      }
+      catch (Exception ex)
+      {
+        transaction.Rollback();
+        return Ok(new ApiResponse() { isScuccess = false });
+      }
+    }
+
     [HttpGet("{ProjectId}")]
     public async Task<IActionResult> Get(long ProjectId)
     {
