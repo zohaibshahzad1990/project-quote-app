@@ -5,6 +5,7 @@ import { ConfirmationService } from 'primeng/api';
 import { MessageService } from 'primeng/api';
 import { ApiService } from 'src/service/api.service';
 import { Project, ProjectArray } from 'src/models/model';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-project',
@@ -30,7 +31,7 @@ export class ProjectComponent implements OnInit {
 
   submitted: boolean = false;
 
-  constructor(private productService: ProductService, private messageService: MessageService, private confirmationService: ConfirmationService, private apiService: ApiService) { }
+  constructor(private productService: ProductService, private messageService: MessageService, private confirmationService: ConfirmationService, private apiService: ApiService, private router: Router) { }
 
   ngOnInit() {
     this.loadAllProjects()
@@ -68,6 +69,9 @@ export class ProjectComponent implements OnInit {
   editProject(project: Project) {
     this.project = { ...project };
     this.projectDialog = true;
+  }
+  navigateToProjectDetail(project: Project) {
+    this.router.navigate([`/project/detail/${project.id}`]);
   }
 
   deleteProject(project: Project) {

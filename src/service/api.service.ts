@@ -6,6 +6,7 @@ import { catchError, retry } from 'rxjs/operators';
 import { Category } from 'src/app/model/category';
 import { APIResponse } from 'src/app/model/api-response';
 import { Margin } from 'src/app/model/margin';
+import { ProjectDetail } from 'src/app/model/project-detail';
 
 @Injectable()
 export class ApiService {
@@ -91,7 +92,12 @@ export class ApiService {
     //#endregion
 
     //#region Line Item
-
+    getProjectLineItems(projectId: string) {
+        return this.http.get<ProjectDetail>(`${this.baseUrl}/LinetItem/${projectId}`)
+            .pipe(
+                catchError(this.handleError) // then handle the error
+            );
+    }
     //endregion
     private handleError(error: HttpErrorResponse) {
         if (error.status === 0) {

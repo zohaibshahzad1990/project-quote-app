@@ -1,3 +1,11 @@
+<button pButton type="button" label="Add" (click)="addClick()"></button>
+<button
+  pButton
+  type="button"
+  style="margin-left: 5px"
+  label="Margin"
+  (click)="marginClick()"
+></button>
 <p-table [value]="quoteData" responsiveLayout="scroll" dataKey="name">
   <ng-template pTemplate="header">
     <tr>
@@ -72,18 +80,18 @@
                 <th>Total</th>
               </tr>
             </ng-template>
-            <ng-template pTemplate="body" let-order>
+            <ng-template pTemplate="body" let-sub>
               <tr>
-                <td>{{ quoteData.cost }}</td>
-                <td>{{ quoteData.itemDescription }}</td>
-                <td>{{ quoteData.uom }}</td>
-                <td>{{ quoteData.pricePerQuantity }}</td>
-                <td>{{ quoteData.quantity }}</td>
-                <td>{{ quoteData.gstAmount }}</td>
-                <td>{{ quoteData.waste }}</td>
-                <td>{{ quoteData.totalExGst }}</td>
-                <td>{{ quoteData.marginAmount }}</td>
-                <td>{{ quoteData.total }}</td>
+                <td>{{ sub.categoryPosition }}</td>
+                <td>{{ sub.itemDescription }}</td>
+                <td>{{ sub.uom }}</td>
+                <td>{{ sub.pricePerQuantity }}</td>
+                <td>{{ sub.quantity }}</td>
+                <td>{{ sub.gstAmount }}</td>
+                <td>{{ sub.waste }}</td>
+                <td>{{ sub.totalExGst }}</td>
+                <td>{{ sub.marginAmount }}</td>
+                <td>{{ sub.total }}</td>
               </tr>
             </ng-template>
             <ng-template pTemplate="emptymessage">
