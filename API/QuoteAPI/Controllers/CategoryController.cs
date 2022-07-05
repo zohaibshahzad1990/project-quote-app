@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using QuoteAPI.DAL;
 using QuoteAPI.Model;
+using QuoteAPI.Model.Response;
 
 namespace QuoteAPI.Controllers
 {
@@ -53,17 +54,14 @@ namespace QuoteAPI.Controllers
     [HttpGet("positions/{catId}")]
     public async Task<IActionResult> GetAllCategoryPostions(long catId)
     {
-      var catPoistions = await _context.Categorypostions.Where(x => x.CategoryId==catId).Select(x => x.CategoryPosition).ToListAsync();
-      if (catPoistions.Count==0)
+      var catPoistions = await _context.Categorypostions.Where(x => x.CategoryId==catId).Select(x => new CategoryPositionResponse()
       {
-        var catPoistion = await _context.Categories.Where(x => x.Id==catId).Select(x => x.CategoryId).FirstOrDefaultAsync();
-        return Ok(new List<decimal>() { (decimal)catPoistion });
+        Id=x.Id,
+        Position=x.CategoryPosition
       }
-      else
-      {
-        return Ok(catPoistions);
-      }
-
+        ).ToListAsync();
+      return Ok(catPoistions);
+      
       
     }
   }

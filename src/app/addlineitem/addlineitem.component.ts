@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { ApiService } from 'src/service/api.service';
-import { Category } from '../model/category';
+import { Category, CategoryPosition } from '../model/category';
 
 @Component({
   selector: 'app-addlineitem',
@@ -10,7 +10,10 @@ import { Category } from '../model/category';
 })
 export class AddlineitemComponent implements OnInit {
   categories: Category[] = [];
-  selectedCateory: any;
+  selectedCateory: Category = {} as Category;
+  categoryPoistion: CategoryPosition[] = [];
+  selectedCategoryPosition: CategoryPosition = {} as CategoryPosition;
+  selectedPosition: any;
   marginLineItem: any;
   marginAmount: any;
   itemDescription: any;
@@ -36,14 +39,46 @@ export class AddlineitemComponent implements OnInit {
       this.apiService.getCatogory(this.projectId).subscribe({
         next: (data: Category[]) => {
 
-          this.categories = data
+          if (data.length > 0) {
+            this.categories = data
+          }
+          else {
+            this.loadEmptyCategory();
+          }
         }, // success path
         // error: error => this.error = error, // error path
       });
     })
 
   }
+  init() {
+    this.loadEmptyCategory();
+    this.loadEmptyCategoryPoistion();
+  }
+  loadEmptyCategory() {
+    let emptyCategory: Category[] = [{ id: 0, name: 'none', categorypostions: [], categoryId: 0, createdOn: new Date(), projectId: 0, updatedOn: new Date(), project: null }]
+    this.categories = emptyCategory;
+  }
+  loadEmptyCategoryPoistion() {
+    let emptyCategory: CategoryPosition[] = [{ id: 0, position: 'none', }]
+    this.categoryPoistion = emptyCategory;
+  }
+  onChangeCategory() {
+    this.apiService.getCatogoryPostions(this.selectedCateory.id).subscribe({
+      next: (data: CategoryPosition[]) => {
 
+        if (data.length > 0) {
+          this.categoryPoistion = data
+          this.categoryPoistion.push({ id: 0, position: "none" })
+        }
+        else {
+          this.loadEmptyCategoryPoistion();
+        }
+      }, // success path
+      // error: error => this.error = error, // error path
+    });
+    console.log(this.selectedCateory)
+  }
   handleSubmit(e: any) {
 
   }

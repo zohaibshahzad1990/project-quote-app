@@ -8,3 +8,8 @@ export interface Category {
     project?: any;
     categorypostions: any[];
 }
+
+export interface CategoryPosition {
+    id: number;
+    position: string
+}

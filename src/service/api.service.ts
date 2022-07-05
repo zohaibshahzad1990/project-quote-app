@@ -3,7 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Project, ProjectArray } from 'src/models/model';
 import { Observable, throwError } from 'rxjs';
 import { catchError, retry } from 'rxjs/operators';
-import { Category } from 'src/app/model/category';
+import { Category, CategoryPosition } from 'src/app/model/category';
 import { APIResponse } from 'src/app/model/api-response';
 import { Margin } from 'src/app/model/margin';
 import { ProjectDetail } from 'src/app/model/project-detail';
@@ -79,6 +79,12 @@ export class ApiService {
     //#region Category 
     getCatogory(projectId: number) {
         return this.http.get<Category[]>(`${this.baseUrl}/category/${projectId}`)
+            .pipe(
+                catchError(this.handleError) // then handle the error
+            );
+    }
+    getCatogoryPostions(catId: number) {
+        return this.http.get<CategoryPosition[]>(`${this.baseUrl}/Category/positions/${catId}`)
             .pipe(
                 catchError(this.handleError) // then handle the error
             );
