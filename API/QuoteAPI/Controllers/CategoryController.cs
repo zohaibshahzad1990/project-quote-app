@@ -50,5 +50,10 @@ namespace QuoteAPI.Controllers
     {
       return Ok(await _context.Categories.Where(x => x.ProjectId==ProjectId).ToListAsync());
     }
+    [HttpGet("/positions/{catId}")]
+    public async Task<IActionResult> GetAllCategoryPostions(long catId)
+    {
+      return Ok(await _context.Categorypostions.Where(x => x.CategoryId==catId).Select(x=>x.CategoryPosition).ToListAsync());
+    }
   }
 }
